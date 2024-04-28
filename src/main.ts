@@ -160,9 +160,9 @@ function showInfo() {
             const staff = getData[i];
             if (staff) {
                 let isM: boolean;
-                if (staff.isMarried === true || staff.isMarried === "on") {
+                if (staff.isMarried === true || staff.isMarried === "on" || staff.isMarried === "true") {
                     isM = true
-                } else if (staff.isMarried === "off" || staff.isMarried === undefined) {
+                } else if (staff.isMarried === "off" || staff.isMarried === undefined || staff.isMarried === "false") {
                     isM = false
                 } else {
                     isM = false
@@ -245,8 +245,10 @@ function readInfo(
     if (isMarried instanceof HTMLInputElement) {
         if (IsMarried === "true" || IsMarried === "on") {
             isMarried.checked = true;
-        } else {
+        } else if (IsMarried === "off" || IsMarried === "undefined") {
             isMarried.checked = false;
+        } else {
+            isMarried.checked = false
         }
     }
 
@@ -328,10 +330,11 @@ function editInfo(
     if (isMarried instanceof HTMLInputElement) {
         if (IsMarried === "true" || IsMarried === "on") {
             isMarried.checked = true;
-        } else {
+        } else if (IsMarried === "off" || IsMarried === "undefined") {
             isMarried.checked = false;
+        } else {
+            isMarried.checked = false
         }
-        isMarried.required = false;
     }
 
     if (darkBg instanceof HTMLElement) {
@@ -412,11 +415,9 @@ form.addEventListener('submit', (e: Event) => {
         position: position instanceof HTMLInputElement ? position.value : "",
         salary: salary instanceof HTMLInputElement ? salary.value : "",
         email: email instanceof HTMLInputElement ? email.value : "",
-        isMarried: isMarried instanceof HTMLInputElement ? isMarried.selected : false,
+        isMarried: isMarried instanceof HTMLInputElement ? isMarried.checked : "",
     };
-    console.log(typeof isMarried);
-
-
+    
     if (!isEdit) {
         if (originalData instanceof Array) {
             originalData.unshift(information);

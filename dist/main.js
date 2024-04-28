@@ -141,10 +141,10 @@ function showInfo() {
             const staff = getData[i];
             if (staff) {
                 let isM;
-                if (staff.isMarried === true || staff.isMarried === "on") {
+                if (staff.isMarried === true || staff.isMarried === "on" || staff.isMarried === "true") {
                     isM = true;
                 }
-                else if (staff.isMarried === "off" || staff.isMarried === undefined) {
+                else if (staff.isMarried === "off" || staff.isMarried === undefined || staff.isMarried === "false") {
                     isM = false;
                 }
                 else {
@@ -217,6 +217,9 @@ function readInfo(pic, FName, Lname, BirthDate, Address, Position, Email, Salary
         if (IsMarried === "true" || IsMarried === "on") {
             isMarried.checked = true;
         }
+        else if (IsMarried === "off" || IsMarried === "undefined") {
+            isMarried.checked = false;
+        }
         else {
             isMarried.checked = false;
         }
@@ -286,10 +289,12 @@ function editInfo(id, pic, FName, Lname, BirthDate, Address, Position, Email, Sa
         if (IsMarried === "true" || IsMarried === "on") {
             isMarried.checked = true;
         }
+        else if (IsMarried === "off" || IsMarried === "undefined") {
+            isMarried.checked = false;
+        }
         else {
             isMarried.checked = false;
         }
-        isMarried.required = false;
     }
     if (darkBg instanceof HTMLElement) {
         darkBg.classList.add('active');
@@ -363,9 +368,8 @@ form.addEventListener('submit', (e) => {
         position: position instanceof HTMLInputElement ? position.value : "",
         salary: salary instanceof HTMLInputElement ? salary.value : "",
         email: email instanceof HTMLInputElement ? email.value : "",
-        isMarried: isMarried instanceof HTMLInputElement ? isMarried.selected : false,
+        isMarried: isMarried instanceof HTMLInputElement ? isMarried.checked : "",
     };
-    console.log(typeof isMarried);
     if (!isEdit) {
         if (originalData instanceof Array) {
             originalData.unshift(information);

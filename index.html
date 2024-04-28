@@ -47,16 +47,15 @@
 
             <thead>
                 <tr class="heading">
-                    <th>SL No</th>
-                    <th>Picture</th>
+                    <th>No.</th>
+                    <th>Avatar</th>
                     <th>Full Name</th>
-                    <th>Age</th>
-                    <th>City</th>
+                    <th>Birth date</th>
+                    <th>Address</th>
                     <th>Position</th>
-                    <th>Salary</th>
-                    <th>Start Date</th>
                     <th>Email</th>
-                    <th>Phone</th>
+                    <th>Salary</th>
+                    <th>Is married</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -95,7 +94,6 @@
                     </div>
 
                     <div class="inputFieldContainer">
-
                         <div class="nameField">
                             <div class="form_control">
                                 <label for="fName">First Name:</label>
@@ -110,13 +108,13 @@
 
                         <div class="ageCityField">
                             <div class="form_control">
-                                <label for="age">Age:</label>
-                                <input type="number" name="" id="age" required>
+                                <label for="birthDate">Birth date:</label>
+                                <input type="date" name="" id="birthDate" required>
                             </div>
 
                             <div class="form_control">
-                                <label for="city">City:</label>
-                                <input type="text" name="" id="city" required>
+                                <label for="address">Address:</label>
+                                <input type="text" name="" id="address" required>
                             </div>
                         </div>
 
@@ -132,19 +130,15 @@
                             </div>
                         </div>
 
-                        <div class="form_control">
-                            <label for="sDate">Start Date:</label>
-                            <input type="date" name="" id="sDate" required>
-                        </div>
-
-                        <div class="form_control">
-                            <label for="email">Email:</label>
-                            <input type="email" name="" id="email" required>
-                        </div>
-
-                        <div class="form_control">
-                            <label for="phone">Phone:</label>
-                            <input type="number" name="" id="phone" required>
+                        <div class="typeMarried">
+                            <div class="form_control">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form_control marry">
+                                <label for="isMarried">Is married:</label>
+                                <input type="checkbox" name="isMarried" id="isMarried">
+                            </div>
                         </div>
                     </div>
                 </form>

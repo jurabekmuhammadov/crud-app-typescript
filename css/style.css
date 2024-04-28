@@ -23,18 +23,19 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
   background: linear-gradient(var(--red1) 50%, var(--dark2) 50%);
+  margin: 0 auto;
 }
 
 .container {
+  width: 1500px;
   padding: 20px;
   box-shadow: 3px 3px 20px var(--dark1);
   background: var(--dark3);
   border-radius: 10px;
-  margin: 10px;
-  margin-top: 50px;
+  margin: 30px;
 }
 
 .container header .filterEntries {
@@ -103,7 +104,7 @@ header .addMemberBtn button,
 
 .container table {
   border-collapse: collapse;
-  text-align: left;
+  width: 100%;
 }
 
 table .heading {
@@ -347,7 +348,8 @@ table tr .empty {
 
 form .inputFieldContainer .nameField,
 form .inputFieldContainer .ageCityField,
-form .inputFieldContainer .postSalary {
+form .inputFieldContainer .postSalary,
+form .inputFieldContainer .typeMarried {
   display: flex;
   justify-content: space-between;
   gap: 15px;
@@ -355,11 +357,35 @@ form .inputFieldContainer .postSalary {
 
 form .inputFieldContainer .nameField input,
 form .inputFieldContainer .ageCityField input,
-form .inputFieldContainer .postSalary input {
+form .inputFieldContainer .postSalary input,
+form .inputFieldContainer .typeMarried select {
   width: 200px;
 }
 
+form .inputFieldContainer .typeMarried select {
+  padding: 10px;
+  border: 1px solid var(--dark6);
+  color: var(--dark8);
+  background: var(--dark4);
+  border-radius: 5px;
+  outline: none;
+  transition: 0.3s;
+  width: 100% !important;
+}
+
+form .inputFieldContainer .typeMarried .marry{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+form .inputFieldContainer .typeMarried .marry input {
+  width: auto;
+}
+
 .inputFieldContainer .form_control {
+  width: 50%;
   margin: 10px 0;
 }
 

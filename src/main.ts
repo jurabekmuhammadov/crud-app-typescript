@@ -9,23 +9,25 @@ const imgInput: Element = document.querySelector('.img')!;
 const imgHolder: Element = document.querySelector('.imgholder')!;
 const form: Element = document.querySelector('form')!;
 const formInputFields: NodeListOf<Element> = document.querySelectorAll('form input');
+
 const uploadimg: Element = document.querySelector("#uploadimg")!;
 const fName: Element = document.getElementById("fName")!;
 const lName: Element = document.getElementById("lName")!;
-const age: Element = document.getElementById("age")!;
-const city: Element = document.getElementById("city")!;
+const address: Element = document.getElementById("address")!;
+const birthDate: Element = document.getElementById("birthDate")!;
 const position: Element = document.getElementById("position")!;
 const salary: Element = document.getElementById("salary")!;
-const sDate: Element = document.getElementById("sDate")!;
 const email: Element = document.getElementById("email")!;
-const phone: Element = document.getElementById("phone")!;
+const isMarried: Element = document.getElementById("isMarried")!;
+
 const entries: Element = document.querySelector(".showEntries")!;
 const tabSize: Element = document.getElementById("table_size")!;
 const userInfo: Element = document.querySelector(".userInfo")!;
 const table: Element = document.querySelector("table")!;
 const filterData: Element = document.getElementById("search")!;
 
-let originalData: any[] = localStorage.getItem('userProfile') !== null ? JSON.parse(localStorage.getItem('userProfile')!) : [];
+let originalData: any[] = localStorage.getItem('users') !== null ? JSON.parse(localStorage.getItem('users')!) : [];
+
 
 let getData: any[] = [...originalData];
 
@@ -55,7 +57,6 @@ newMemberAddBtn.addEventListener('click', () => {
     darkBg.classList.add('active');
     popupForm.classList.add('active');
 });
-
 crossBtn.addEventListener('click', () => {
     darkBg.classList.remove('active');
     popupForm.classList.remove('active');
@@ -64,7 +65,6 @@ crossBtn.addEventListener('click', () => {
     }
 
 });
-
 if (uploadimg instanceof HTMLInputElement && imgInput instanceof HTMLImageElement) {
     uploadimg.onchange = function () {
         const file = uploadimg.files?.[0];
@@ -80,8 +80,6 @@ if (uploadimg instanceof HTMLInputElement && imgInput instanceof HTMLImageElemen
         }
     };
 }
-
-
 function preLoadCalculations() {
     let array = getData;
     arrayLength = array.length;
@@ -91,7 +89,6 @@ function preLoadCalculations() {
         maxIndex++;
     }
 }
-
 function displayIndexBtn() {
     preLoadCalculations();
 
@@ -121,8 +118,6 @@ function displayIndexBtn() {
 
     highlightIndexBtn();
 }
-
-
 function highlightIndexBtn() {
     startIndex = ((currentIndex - 1) * tableSize) + 1;
     endIndex = (startIndex + tableSize) - 1;
@@ -154,7 +149,6 @@ function highlightIndexBtn() {
 
     showInfo();
 }
-
 function showInfo() {
     document.querySelectorAll(".employeeDetails").forEach(info => info.remove());
 
@@ -164,23 +158,29 @@ function showInfo() {
     if (getData.length > 0) {
         for (let i = tab_start; i < tab_end; i++) {
             const staff = getData[i];
-
             if (staff) {
+                let isM: boolean;
+                if (staff.isMarried === true || staff.isMarried === "on") {
+                    isM = true
+                } else if (staff.isMarried === "off" || staff.isMarried === undefined) {
+                    isM = false
+                } else {
+                    isM = false
+                }
                 const createElement = `<tr class="employeeDetails">
                 <td>${i + 1}</td>
                 <td><img src="${staff.picture}" alt="" width="40" height="40"></td>
                 <td>${staff.fName + " " + staff.lName}</td>
-                <td>${staff.ageVal}</td>
-                <td>${staff.cityVal}</td>
-                <td>${staff.positionVal}</td>
-                <td>${staff.salaryVal}</td>
-                <td>${staff.sDateVal}</td>
-                <td>${staff.emailVal}</td>
-                <td>${staff.phoneVal}</td>
+                <td>${staff.birthDate.split("T")[0]}</td>
+                <td>${staff.address}</td>
+                <td>${staff.position}</td>
+                <td>${staff.email}</td>
+                <td>${staff.salary}</td>
+                <td>${isM}</td>
                 <td>
-                    <button onclick="readInfo('${staff.picture}', '${staff.fName}', '${staff.lName}', '${staff.ageVal}', '${staff.cityVal}', '${staff.positionVal}', '${staff.salaryVal}', '${staff.sDateVal}', '${staff.emailVal}', '${staff.phoneVal}')"><i class="fa-regular fa-eye"></i></button>
+                    <button onclick="readInfo('${staff.picture}', '${staff.fName}', '${staff.lName}', '${staff.birthDate.split("T")[0]}', '${staff.address}', '${staff.position}', '${staff.email}', '${staff.salary}', '${staff.isMarried}')"><i class="fa-regular fa-eye"></i></button>
 
-                    <button onclick="editInfo('${i}', '${staff.picture}', '${staff.fName}', '${staff.lName}', '${staff.ageVal}', '${staff.cityVal}', '${staff.positionVal}', '${staff.salaryVal}', '${staff.sDateVal}', '${staff.emailVal}', '${staff.phoneVal}')"><i class="fa-regular fa-pen-to-square"></i></button>
+                    <button onclick="editInfo('${i}', '${staff.picture}', '${staff.fName}', '${staff.lName}', '${staff.birthDate.split("T")[0]}', '${staff.address}', '${staff.position}', '${staff.email}', '${staff.salary}', '${staff.isMarried}')"><i class="fa-regular fa-pen-to-square"></i></button>
 
                     <button onclick="deleteInfo(${i})"><i class="fa-regular fa-trash-can"></i></button>
                 </td>
@@ -199,40 +199,39 @@ function showInfo() {
             userInfo.innerHTML = `<tr class="employeeDetails"><td class="empty" colspan="11" align="center">No data available in table</td></tr>`;
         }
         if (table instanceof HTMLElement) {
-            table.style.minWidth = "1400px";
+            table.style.minWidth = "1500px";
         }
     }
 }
-
-
 showInfo();
-
 function readInfo(
     pic: string,
-    fname: string,
-    lname: string,
-    Age: string,
-    City: string,
+    FName: string,
+    Lname: string,
+    BirthDate: string,
+    Address: string,
     Position: string,
-    Salary: string,
-    SDate: string,
     Email: string,
-    Phone: string
+    Salary: string,
+    IsMarried: string,
+
 ) {
+    console.log(typeof IsMarried);
+
     if (imgInput instanceof HTMLImageElement) {
         imgInput.src = pic;
     }
     if (fName instanceof HTMLInputElement) {
-        fName.value = fname;
+        fName.value = FName;
     }
     if (lName instanceof HTMLInputElement) {
-        lName.value = lname;
+        lName.value = Lname;
     }
-    if (age instanceof HTMLInputElement) {
-        age.value = Age;
+    if (address instanceof HTMLInputElement) {
+        address.value = Address;
     }
-    if (city instanceof HTMLInputElement) {
-        city.value = City;
+    if (birthDate instanceof HTMLInputElement) {
+        birthDate.value = BirthDate;
     }
     if (position instanceof HTMLInputElement) {
         position.value = Position;
@@ -240,14 +239,15 @@ function readInfo(
     if (salary instanceof HTMLInputElement) {
         salary.value = Salary;
     }
-    if (sDate instanceof HTMLInputElement) {
-        sDate.value = SDate;
-    }
     if (email instanceof HTMLInputElement) {
         email.value = Email;
     }
-    if (phone instanceof HTMLInputElement) {
-        phone.value = Phone;
+    if (isMarried instanceof HTMLInputElement) {
+        if (IsMarried === "true" || IsMarried === "on") {
+            isMarried.checked = true;
+        } else {
+            isMarried.checked = false;
+        }
     }
 
     if (darkBg instanceof HTMLElement) {
@@ -271,20 +271,17 @@ function readInfo(
         imgHolder.style.pointerEvents = "none";
     }
 }
-
-
 function editInfo(
     id: number,
     pic: string,
-    fname: string,
-    lname: string,
-    Age: string,
-    City: string,
+    FName: string,
+    Lname: string,
+    BirthDate: string,
+    Address: string,
     Position: string,
-    Salary: string,
-    SDate: string,
     Email: string,
-    Phone: string
+    Salary: string,
+    IsMarried: string,
 ) {
     isEdit = true;
     editId = id;
@@ -294,31 +291,30 @@ function editInfo(
     originalData[originalIndex] = {
         id: id,
         picture: pic,
-        fName: fname,
-        lName: lname,
-        ageVal: Age,
-        cityVal: City,
-        positionVal: Position,
-        salaryVal: Salary,
-        sDateVal: SDate,
-        emailVal: Email,
-        phoneVal: Phone
+        fName: FName,
+        lName: Lname,
+        birthDate: BirthDate,
+        address: Address,
+        position: Position,
+        salary: Salary,
+        email: Email,
+        isMarried: IsMarried,
     };
 
     if (imgInput instanceof HTMLImageElement) {
         imgInput.src = pic;
     }
     if (fName instanceof HTMLInputElement) {
-        fName.value = fname;
+        fName.value = FName;
     }
     if (lName instanceof HTMLInputElement) {
-        lName.value = lname;
+        lName.value = Lname;
     }
-    if (age instanceof HTMLInputElement) {
-        age.value = Age;
+    if (birthDate instanceof HTMLInputElement) {
+        birthDate.value = BirthDate;
     }
-    if (city instanceof HTMLInputElement) {
-        city.value = City;
+    if (address instanceof HTMLInputElement) {
+        address.value = Address;
     }
     if (position instanceof HTMLInputElement) {
         position.value = Position;
@@ -326,14 +322,16 @@ function editInfo(
     if (salary instanceof HTMLInputElement) {
         salary.value = Salary;
     }
-    if (sDate instanceof HTMLInputElement) {
-        sDate.value = SDate;
-    }
     if (email instanceof HTMLInputElement) {
         email.value = Email;
     }
-    if (phone instanceof HTMLInputElement) {
-        phone.value = Phone;
+    if (isMarried instanceof HTMLInputElement) {
+        if (IsMarried === "true" || IsMarried === "on") {
+            isMarried.checked = true;
+        } else {
+            isMarried.checked = false;
+        }
+        isMarried.required = false;
     }
 
     if (darkBg instanceof HTMLElement) {
@@ -360,13 +358,11 @@ function editInfo(
         imgHolder.style.pointerEvents = "auto";
     }
 }
-
-
 function deleteInfo(index: number) {
     if (confirm("Are you sure you want to delete?")) {
         if (originalData instanceof Array) {
             originalData.splice(index, 1);
-            localStorage.setItem("userProfile", JSON.stringify(originalData));
+            localStorage.setItem("users", JSON.stringify(originalData));
 
             getData = [...originalData];
 
@@ -403,7 +399,6 @@ function deleteInfo(index: number) {
         }
     }
 }
-
 form.addEventListener('submit', (e: Event) => {
     e.preventDefault();
 
@@ -412,14 +407,15 @@ form.addEventListener('submit', (e: Event) => {
         picture: imgInput instanceof HTMLImageElement ? (imgInput.src || "./img/pic1.png") : "./img/pic1.png",
         fName: fName instanceof HTMLInputElement ? fName.value : "",
         lName: lName instanceof HTMLInputElement ? lName.value : "",
-        ageVal: age instanceof HTMLInputElement ? age.value : "",
-        cityVal: city instanceof HTMLInputElement ? city.value : "",
-        positionVal: position instanceof HTMLInputElement ? position.value : "",
-        salaryVal: salary instanceof HTMLInputElement ? salary.value : "",
-        sDateVal: sDate instanceof HTMLInputElement ? sDate.value : "",
-        emailVal: email instanceof HTMLInputElement ? email.value : "",
-        phoneVal: phone instanceof HTMLInputElement ? phone.value : ""
+        birthDate: birthDate instanceof HTMLInputElement ? birthDate.value : "",
+        address: address instanceof HTMLInputElement ? address.value : "",
+        position: position instanceof HTMLInputElement ? position.value : "",
+        salary: salary instanceof HTMLInputElement ? salary.value : "",
+        email: email instanceof HTMLInputElement ? email.value : "",
+        isMarried: isMarried instanceof HTMLInputElement ? isMarried.selected : false,
     };
+    console.log(typeof isMarried);
+
 
     if (!isEdit) {
         if (originalData instanceof Array) {
@@ -431,7 +427,7 @@ form.addEventListener('submit', (e: Event) => {
         }
     }
     getData = [...originalData];
-    localStorage.setItem('userProfile', JSON.stringify(originalData));
+    localStorage.setItem('users', JSON.stringify(originalData));
 
     if (submitBtn instanceof HTMLElement) {
         submitBtn.innerHTML = "Submit";
@@ -476,8 +472,6 @@ form.addEventListener('submit', (e: Event) => {
         }
     }
 });
-
-
 function next() {
     const prevBtn = document.querySelector('.prev') as HTMLElement | null;
     const nextBtn = document.querySelector('.next') as HTMLElement | null;
@@ -495,7 +489,6 @@ function next() {
         nextBtn.classList.remove("act");
     }
 }
-
 function prev() {
     const prevBtn = document.querySelector('.prev') as HTMLElement | null;
 
@@ -511,7 +504,6 @@ function prev() {
         prevBtn.classList.remove("act");
     }
 }
-
 function paginationBtn(i: number) {
     currentIndex = i;
 
@@ -541,7 +533,6 @@ function paginationBtn(i: number) {
         prevBtn.classList.remove("act");
     }
 }
-
 if (tabSize instanceof HTMLSelectElement) {
     tabSize.addEventListener('change', () => {
         const selectedValue = parseInt(tabSize.value);
@@ -551,8 +542,6 @@ if (tabSize instanceof HTMLSelectElement) {
         displayIndexBtn();
     });
 }
-
-
 if (filterData instanceof HTMLInputElement) {
     filterData.addEventListener("input", () => {
         const searchTerm = filterData.value.toLowerCase().trim();
@@ -560,19 +549,15 @@ if (filterData instanceof HTMLInputElement) {
         if (searchTerm !== "") {
             const filteredData = originalData.filter((item: any) => {
                 const fullName = (item.fName + " " + item.lName).toLowerCase();
-                const city = item.cityVal.toLowerCase();
-                const position = item.positionVal.toLowerCase();
 
                 return (
-                    fullName.includes(searchTerm) ||
-                    city.includes(searchTerm) ||
-                    position.includes(searchTerm)
+                    fullName.includes(searchTerm)
                 );
             });
 
             getData = filteredData;
         } else {
-            const userProfileString = localStorage.getItem('userProfile');
+            const userProfileString = localStorage.getItem('users');
             const userProfileData = userProfileString !== null ? JSON.parse(userProfileString) : [];
             getData = Array.isArray(userProfileData) ? userProfileData : [];
         }
@@ -581,10 +566,6 @@ if (filterData instanceof HTMLInputElement) {
         startIndex = 1;
         displayIndexBtn();
     });
-} else {
-    console.error("filterData is not an input element");
 }
-
-
 
 displayIndexBtn();

@@ -1,35 +1,10 @@
 "use strict";
-const newMemberAddBtn = document.querySelector('.addMemberBtn');
-const darkBg = document.querySelector('.dark_bg');
-const popupForm = document.querySelector('.popup');
-const crossBtn = document.querySelector('.closeBtn');
-const submitBtn = document.querySelector('.submitBtn');
-const modalTitle = document.querySelector('.modalTitle');
-const popupFooter = document.querySelector('.popupFooter');
-const imgInput = document.querySelector('.img');
-const imgHolder = document.querySelector('.imgholder');
-const form = document.querySelector('form');
-const formInputFields = document.querySelectorAll('form input');
-const uploadimg = document.querySelector("#uploadimg");
-const fName = document.getElementById("fName");
-const lName = document.getElementById("lName");
-const address = document.getElementById("address");
-const birthDate = document.getElementById("birthDate");
-const position = document.getElementById("position");
-const salary = document.getElementById("salary");
-const email = document.getElementById("email");
-const isMarried = document.getElementById("isMarried");
-const entries = document.querySelector(".showEntries");
-const tabSize = document.getElementById("table_size");
-const userInfo = document.querySelector(".userInfo");
-const table = document.querySelector("table");
-const filterData = document.getElementById("search");
 let originalData = localStorage.getItem('users') !== null ? JSON.parse(localStorage.getItem('users')) : [];
 let getData = [...originalData];
 let isEdit = false;
 let editId;
 let arrayLength = 0;
-let tableSize = 5;
+let tableSize = 10;
 let startIndex = 1;
 let endIndex = 0;
 let currentIndex = 1;
@@ -74,63 +49,6 @@ if (uploadimg instanceof HTMLInputElement && imgInput instanceof HTMLImageElemen
             alert("This file is too large!");
         }
     };
-}
-function preLoadCalculations() {
-    let array = getData;
-    arrayLength = array.length;
-    maxIndex = arrayLength / tableSize;
-    if ((arrayLength % tableSize) > 0) {
-        maxIndex++;
-    }
-}
-function displayIndexBtn() {
-    preLoadCalculations();
-    const pagination = document.querySelector('.pagination');
-    pagination.innerHTML = "";
-    const prevButton = document.createElement('button');
-    prevButton.textContent = 'Previous';
-    prevButton.classList.add('prev');
-    prevButton.addEventListener('click', prev);
-    pagination.appendChild(prevButton);
-    for (let i = 1; i <= maxIndex; i++) {
-        const button = document.createElement('button');
-        button.textContent = String(i);
-        button.setAttribute('index', String(i));
-        button.addEventListener('click', () => paginationBtn(i));
-        pagination.appendChild(button);
-    }
-    const nextButton = document.createElement('button');
-    nextButton.textContent = 'Next';
-    nextButton.classList.add('next');
-    nextButton.addEventListener('click', next);
-    pagination.appendChild(nextButton);
-    highlightIndexBtn();
-}
-function highlightIndexBtn() {
-    startIndex = ((currentIndex - 1) * tableSize) + 1;
-    endIndex = (startIndex + tableSize) - 1;
-    if (endIndex > arrayLength) {
-        endIndex = arrayLength;
-    }
-    if (maxIndex >= 2) {
-        const nextBtn = document.querySelector(".next");
-        if (nextBtn) {
-            nextBtn.classList.add("act");
-        }
-    }
-    if (entries instanceof Element) {
-        entries.textContent = `Showing ${startIndex} to ${endIndex} of ${arrayLength} entries`;
-    }
-    const paginationBtns = document.querySelectorAll('.pagination button');
-    paginationBtns.forEach(btn => {
-        if (btn instanceof HTMLButtonElement) {
-            btn.classList.remove('active');
-            if (btn.getAttribute('index') === currentIndex.toString()) {
-                btn.classList.add('active');
-            }
-        }
-    });
-    showInfo();
 }
 function showInfo() {
     document.querySelectorAll(".employeeDetails").forEach(info => info.remove());
@@ -422,57 +340,6 @@ form.addEventListener('submit', (e) => {
         }
     }
 });
-function next() {
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    if (currentIndex <= maxIndex - 1) {
-        currentIndex++;
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-        highlightIndexBtn();
-    }
-    if (currentIndex > maxIndex - 1 && nextBtn) {
-        nextBtn.classList.remove("act");
-    }
-}
-function prev() {
-    const prevBtn = document.querySelector('.prev');
-    if (currentIndex > 1) {
-        currentIndex--;
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-        highlightIndexBtn();
-    }
-    if (currentIndex < 2 && prevBtn) {
-        prevBtn.classList.remove("act");
-    }
-}
-function paginationBtn(i) {
-    currentIndex = i;
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    highlightIndexBtn();
-    if (currentIndex > maxIndex - 1) {
-        if (nextBtn) {
-            nextBtn.classList.remove('act');
-        }
-    }
-    else {
-        if (nextBtn) {
-            nextBtn.classList.add("act");
-        }
-    }
-    if (currentIndex > 1) {
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-    }
-    if (currentIndex < 2 && prevBtn) {
-        prevBtn.classList.remove("act");
-    }
-}
 if (tabSize instanceof HTMLSelectElement) {
     tabSize.addEventListener('change', () => {
         const selectedValue = parseInt(tabSize.value);

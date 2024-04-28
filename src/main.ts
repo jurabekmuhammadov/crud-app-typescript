@@ -1,41 +1,9 @@
-const newMemberAddBtn: Element = document.querySelector('.addMemberBtn')!;
-const darkBg: Element = document.querySelector('.dark_bg')!;
-const popupForm: Element = document.querySelector('.popup')!;
-const crossBtn: Element = document.querySelector('.closeBtn')!;
-const submitBtn: Element = document.querySelector('.submitBtn')!;
-const modalTitle: Element = document.querySelector('.modalTitle')!;
-const popupFooter: Element = document.querySelector('.popupFooter')!;
-const imgInput: Element = document.querySelector('.img')!;
-const imgHolder: Element = document.querySelector('.imgholder')!;
-const form: Element = document.querySelector('form')!;
-const formInputFields: NodeListOf<Element> = document.querySelectorAll('form input');
-
-const uploadimg: Element = document.querySelector("#uploadimg")!;
-const fName: Element = document.getElementById("fName")!;
-const lName: Element = document.getElementById("lName")!;
-const address: Element = document.getElementById("address")!;
-const birthDate: Element = document.getElementById("birthDate")!;
-const position: Element = document.getElementById("position")!;
-const salary: Element = document.getElementById("salary")!;
-const email: Element = document.getElementById("email")!;
-const isMarried: Element = document.getElementById("isMarried")!;
-
-const entries: Element = document.querySelector(".showEntries")!;
-const tabSize: Element = document.getElementById("table_size")!;
-const userInfo: Element = document.querySelector(".userInfo")!;
-const table: Element = document.querySelector("table")!;
-const filterData: Element = document.getElementById("search")!;
-
 let originalData: any[] = localStorage.getItem('users') !== null ? JSON.parse(localStorage.getItem('users')!) : [];
-
-
 let getData: any[] = [...originalData];
-
 let isEdit: boolean = false;
 let editId: number;
-
 let arrayLength: number = 0;
-let tableSize: number = 5;
+let tableSize: number = 10;
 let startIndex: number = 1;
 let endIndex: number = 0;
 let currentIndex: number = 1;
@@ -57,6 +25,7 @@ newMemberAddBtn.addEventListener('click', () => {
     darkBg.classList.add('active');
     popupForm.classList.add('active');
 });
+
 crossBtn.addEventListener('click', () => {
     darkBg.classList.remove('active');
     popupForm.classList.remove('active');
@@ -65,6 +34,7 @@ crossBtn.addEventListener('click', () => {
     }
 
 });
+
 if (uploadimg instanceof HTMLInputElement && imgInput instanceof HTMLImageElement) {
     uploadimg.onchange = function () {
         const file = uploadimg.files?.[0];
@@ -80,75 +50,7 @@ if (uploadimg instanceof HTMLInputElement && imgInput instanceof HTMLImageElemen
         }
     };
 }
-function preLoadCalculations() {
-    let array = getData;
-    arrayLength = array.length;
-    maxIndex = arrayLength / tableSize;
 
-    if ((arrayLength % tableSize) > 0) {
-        maxIndex++;
-    }
-}
-function displayIndexBtn() {
-    preLoadCalculations();
-
-    const pagination = document.querySelector('.pagination') as HTMLElement;
-
-    pagination.innerHTML = "";
-
-    const prevButton = document.createElement('button');
-    prevButton.textContent = 'Previous';
-    prevButton.classList.add('prev');
-    prevButton.addEventListener('click', prev);
-    pagination.appendChild(prevButton);
-
-    for (let i = 1; i <= maxIndex; i++) {
-        const button = document.createElement('button');
-        button.textContent = String(i);
-        button.setAttribute('index', String(i));
-        button.addEventListener('click', () => paginationBtn(i));
-        pagination.appendChild(button);
-    }
-
-    const nextButton = document.createElement('button');
-    nextButton.textContent = 'Next';
-    nextButton.classList.add('next');
-    nextButton.addEventListener('click', next);
-    pagination.appendChild(nextButton);
-
-    highlightIndexBtn();
-}
-function highlightIndexBtn() {
-    startIndex = ((currentIndex - 1) * tableSize) + 1;
-    endIndex = (startIndex + tableSize) - 1;
-
-    if (endIndex > arrayLength) {
-        endIndex = arrayLength;
-    }
-
-    if (maxIndex >= 2) {
-        const nextBtn = document.querySelector(".next") as HTMLButtonElement | null;
-        if (nextBtn) {
-            nextBtn.classList.add("act");
-        }
-    }
-
-    if (entries instanceof Element) {
-        entries.textContent = `Showing ${startIndex} to ${endIndex} of ${arrayLength} entries`;
-    }
-
-    const paginationBtns = document.querySelectorAll('.pagination button');
-    paginationBtns.forEach(btn => {
-        if (btn instanceof HTMLButtonElement) {
-            btn.classList.remove('active');
-            if (btn.getAttribute('index') === currentIndex.toString()) {
-                btn.classList.add('active');
-            }
-        }
-    });
-
-    showInfo();
-}
 function showInfo() {
     document.querySelectorAll(".employeeDetails").forEach(info => info.remove());
 
@@ -204,6 +106,7 @@ function showInfo() {
     }
 }
 showInfo();
+
 function readInfo(
     pic: string,
     FName: string,
@@ -273,6 +176,7 @@ function readInfo(
         imgHolder.style.pointerEvents = "none";
     }
 }
+
 function editInfo(
     id: number,
     pic: string,
@@ -361,6 +265,7 @@ function editInfo(
         imgHolder.style.pointerEvents = "auto";
     }
 }
+
 function deleteInfo(index: number) {
     if (confirm("Are you sure you want to delete?")) {
         if (originalData instanceof Array) {
@@ -402,6 +307,7 @@ function deleteInfo(index: number) {
         }
     }
 }
+
 form.addEventListener('submit', (e: Event) => {
     e.preventDefault();
 
@@ -473,67 +379,7 @@ form.addEventListener('submit', (e: Event) => {
         }
     }
 });
-function next() {
-    const prevBtn = document.querySelector('.prev') as HTMLElement | null;
-    const nextBtn = document.querySelector('.next') as HTMLElement | null;
 
-    if (currentIndex <= maxIndex - 1) {
-        currentIndex++;
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-
-        highlightIndexBtn();
-    }
-
-    if (currentIndex > maxIndex - 1 && nextBtn) {
-        nextBtn.classList.remove("act");
-    }
-}
-function prev() {
-    const prevBtn = document.querySelector('.prev') as HTMLElement | null;
-
-    if (currentIndex > 1) {
-        currentIndex--;
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-        highlightIndexBtn();
-    }
-
-    if (currentIndex < 2 && prevBtn) {
-        prevBtn.classList.remove("act");
-    }
-}
-function paginationBtn(i: number) {
-    currentIndex = i;
-
-    const prevBtn = document.querySelector('.prev') as HTMLElement | null;
-    const nextBtn = document.querySelector('.next') as HTMLElement | null;
-
-    highlightIndexBtn();
-
-    if (currentIndex > maxIndex - 1) {
-        if (nextBtn) {
-            nextBtn.classList.remove('act');
-        }
-    }
-    else {
-        if (nextBtn) {
-            nextBtn.classList.add("act");
-        }
-    }
-
-    if (currentIndex > 1) {
-        if (prevBtn) {
-            prevBtn.classList.add("act");
-        }
-    }
-
-    if (currentIndex < 2 && prevBtn) {
-        prevBtn.classList.remove("act");
-    }
-}
 if (tabSize instanceof HTMLSelectElement) {
     tabSize.addEventListener('change', () => {
         const selectedValue = parseInt(tabSize.value);
@@ -543,6 +389,7 @@ if (tabSize instanceof HTMLSelectElement) {
         displayIndexBtn();
     });
 }
+
 if (filterData instanceof HTMLInputElement) {
     filterData.addEventListener("input", () => {
         const searchTerm = filterData.value.toLowerCase().trim();

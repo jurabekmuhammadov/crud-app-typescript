@@ -8,6 +8,7 @@ let startIndex: number = 1;
 let endIndex: number = 0;
 let currentIndex: number = 1;
 let maxIndex: number = 0;
+let isMarried_filter: string = "all";
 
 showInfo();
 
@@ -323,7 +324,7 @@ form.addEventListener('submit', (e: Event) => {
         email: email instanceof HTMLInputElement ? email.value : "",
         isMarried: isMarried instanceof HTMLInputElement ? isMarried.checked : "",
     };
-    
+
     if (!isEdit) {
         if (originalData instanceof Array) {
             originalData.unshift(information);
@@ -390,6 +391,56 @@ if (tabSize instanceof HTMLSelectElement) {
     });
 }
 
+if (isMarriedFilter instanceof HTMLSelectElement) {
+    isMarriedFilter.addEventListener('change', () => {
+        const selectedValue = isMarriedFilter.value;
+        isMarried_filter = selectedValue;
+        applyFilters();
+    });
+};
+
+function applyFilters() {
+    let filteredData = originalData;
+
+    if (isMarried_filter !== "all") {
+        const isMarriedBool = isMarried_filter === "true";
+        filteredData = filteredData.filter((item: any) => {
+            let isMarried: boolean;
+            if (item.isMarried === true) {
+                isMarried = true
+            } else if (item.isMarried === "on") {
+                isMarried = true
+            } else if (item.isMarried === "true") {
+                isMarried = true
+            } else if (item.isMarried === false) {
+                isMarried = false
+            } else if (item.isMarried === "off") {
+                isMarried = false
+            } else if (item.isMarried === "false") {
+                isMarried = false
+            } else {
+                isMarried = true;
+            }
+            return isMarried === isMarriedBool;
+        });
+    }
+
+    const searchTerm = filterData.value.toLowerCase().trim();
+    if (searchTerm !== "") {
+        filteredData = filteredData.filter((item: any) => {
+            const fullName = (item.fName + " " + item.lName).toLowerCase();
+            const email = item.email.toLowerCase();
+            return fullName.includes(searchTerm) || email.includes(searchTerm);
+        });
+    }
+
+    getData = filteredData;
+    currentIndex = 1;
+    startIndex = 1;
+    displayIndexBtn();
+}
+
+
 if (filterData instanceof HTMLInputElement) {
     filterData.addEventListener("input", () => {
         const searchTerm = filterData.value.toLowerCase().trim();
@@ -397,9 +448,11 @@ if (filterData instanceof HTMLInputElement) {
         if (searchTerm !== "") {
             const filteredData = originalData.filter((item: any) => {
                 const fullName = (item.fName + " " + item.lName).toLowerCase();
+                const email = (item.email).toLowerCase();
 
                 return (
-                    fullName.includes(searchTerm)
+                    fullName.includes(searchTerm) ||
+                    email.includes(searchTerm)
                 );
             });
 

@@ -9,6 +9,7 @@ let startIndex = 1;
 let endIndex = 0;
 let currentIndex = 1;
 let maxIndex = 0;
+let isMarried_filter = "all";
 showInfo();
 newMemberAddBtn.addEventListener('click', () => {
     isEdit = false;
@@ -349,13 +350,66 @@ if (tabSize instanceof HTMLSelectElement) {
         displayIndexBtn();
     });
 }
+if (isMarriedFilter instanceof HTMLSelectElement) {
+    isMarriedFilter.addEventListener('change', () => {
+        const selectedValue = isMarriedFilter.value;
+        isMarried_filter = selectedValue;
+        applyFilters();
+    });
+}
+;
+function applyFilters() {
+    let filteredData = originalData;
+    if (isMarried_filter !== "all") {
+        const isMarriedBool = isMarried_filter === "true";
+        filteredData = filteredData.filter((item) => {
+            let isMarried;
+            if (item.isMarried === true) {
+                isMarried = true;
+            }
+            else if (item.isMarried === "on") {
+                isMarried = true;
+            }
+            else if (item.isMarried === "true") {
+                isMarried = true;
+            }
+            else if (item.isMarried === false) {
+                isMarried = false;
+            }
+            else if (item.isMarried === "off") {
+                isMarried = false;
+            }
+            else if (item.isMarried === "false") {
+                isMarried = false;
+            }
+            else {
+                isMarried = true;
+            }
+            return isMarried === isMarriedBool;
+        });
+    }
+    const searchTerm = filterData.value.toLowerCase().trim();
+    if (searchTerm !== "") {
+        filteredData = filteredData.filter((item) => {
+            const fullName = (item.fName + " " + item.lName).toLowerCase();
+            const email = item.email.toLowerCase();
+            return fullName.includes(searchTerm) || email.includes(searchTerm);
+        });
+    }
+    getData = filteredData;
+    currentIndex = 1;
+    startIndex = 1;
+    displayIndexBtn();
+}
 if (filterData instanceof HTMLInputElement) {
     filterData.addEventListener("input", () => {
         const searchTerm = filterData.value.toLowerCase().trim();
         if (searchTerm !== "") {
             const filteredData = originalData.filter((item) => {
                 const fullName = (item.fName + " " + item.lName).toLowerCase();
-                return (fullName.includes(searchTerm));
+                const email = (item.email).toLowerCase();
+                return (fullName.includes(searchTerm) ||
+                    email.includes(searchTerm));
             });
             getData = filteredData;
         }

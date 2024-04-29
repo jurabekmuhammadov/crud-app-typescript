@@ -45,12 +45,25 @@ body {
   margin-bottom: 20px;
 }
 
+.container header .filterEntries .right {
+  display: flex;
+  align-items: center;
+  gap:30px;
+}
+
+.container header .filterEntries .right .filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: end;
+}
+
 .filterEntries .entries {
   color: var(--dark8);
 }
 
 .filterEntries .entries select,
-.filterEntries .filter input {
+.filterEntries .right .filter input,select {
   padding: 7px 10px;
   border: 1px solid var(--dark6);
   color: var(--dark8);
@@ -59,6 +72,10 @@ body {
   outline: none;
   transition: 0.3s;
   cursor: pointer;
+}
+
+.filterEntries .right .filter select {
+  width: 100px;
 }
 
 .filterEntries .entries select {

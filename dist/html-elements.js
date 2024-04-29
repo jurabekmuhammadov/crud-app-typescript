@@ -21,6 +21,7 @@ const email = document.getElementById("email");
 const isMarried = document.getElementById("isMarried");
 const entries = document.querySelector(".showEntries");
 const tabSize = document.getElementById("table_size");
+const isMarriedFilter = document.getElementById("isMarried-filter");
 const userInfo = document.querySelector(".userInfo");
 const table = document.querySelector("table");
 const filterData = document.getElementById("search");

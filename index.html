@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./img/crud.png" type="image/x-icon">
 
     <!--Font Awesome CDN-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -19,7 +20,6 @@
     <div class="container">
 
         <header>
-
             <div class="filterEntries">
                 <div class="entries">
                     Show <select name="table_size" id="table_size">
@@ -30,9 +30,19 @@
                     </select> entries
                 </div>
 
-                <div class="filter">
-                    <label for="search">Search:</label>
-                    <input type="search" name="" id="search" placeholder="Enter name/city/post">
+                <div class="right">
+                    <div class="filter">
+                        <label for="search">Search:</label>
+                        <input type="search" name="" id="search" placeholder="Enter name/email">
+                    </div>
+                    <div class="filter">
+                        <label for="search">Is married:</label>
+                        <select name="isMarried" id="isMarried-filter">
+                            <option value="all" selected>All</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 

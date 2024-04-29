@@ -22,6 +22,7 @@ const isMarried: Element = document.getElementById("isMarried")!;
 
 const entries: Element = document.querySelector(".showEntries")!;
 const tabSize: Element = document.getElementById("table_size")!;
+const isMarriedFilter: Element = document.getElementById("isMarried-filter")!;
 const userInfo: Element = document.querySelector(".userInfo")!;
 const table: Element = document.querySelector("table")!;
 const filterData: Element = document.getElementById("search")!;
